@@ -32,7 +32,7 @@ public class MinioStorageController {
     }
 
     @GetMapping(path = "/download")
-    public ResponseEntity<ByteArrayResource> uploadFile(@RequestParam(value = "file") String file) throws IOException {
+    public ResponseEntity<ByteArrayResource> DownloadFile(@RequestParam(value = "file") String file) throws IOException {
         byte[] data = minioAdapter.getFile(file);
         ByteArrayResource resource = new ByteArrayResource(data);
 
@@ -44,4 +44,10 @@ public class MinioStorageController {
                 .body(resource);
 
     }
+
+    @GetMapping("/remove")
+    public void RemoveFile(@RequestParam(value = "file") String file) throws IOException {
+        minioAdapter.removeFile(file);
+    }
+
 }
