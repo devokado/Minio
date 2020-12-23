@@ -1,5 +1,6 @@
 package com.example.springbootminio;
 
+import io.minio.ObjectStat;
 import io.minio.Result;
 import io.minio.errors.MinioException;
 import io.minio.messages.Item;
@@ -14,7 +15,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class MinioAdapter {
@@ -64,6 +69,23 @@ public class MinioAdapter {
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }
+    }
+    public List<Item> list() {
+        Iterable<Result<Item>> myObjects = minioClient.listObjects(minioProperties.getBuckek_name(), "", false);
+        return getItems(myObjects);
+    }
+
+    private List<Item> getItems(Iterable<Result<Item>> myObjects) {
+        return StreamSupport
+                .stream(myObjects.spliterator(), true)
+                .map(itemResult -> {
+                    try {
+                        return itemResult.get();
+                    } catch (Exception e) {
+                        throw new RuntimeException("Error while parsing list of objects", e);
+                    }
+                })
+                .collect(Collectors.toList());
     }
 
 
