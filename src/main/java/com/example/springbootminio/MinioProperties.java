@@ -13,6 +13,7 @@ public class MinioProperties {
     private  String  access_key="AKIAIOSFODNN7EXAMPLE";
     private   String   access_secret="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
     private   String   url="http://127.0.0.1:9000";
+    private boolean secure = false;
 
     private String metricName = "minio.storage";
 
@@ -20,6 +21,33 @@ public class MinioProperties {
     private Duration connectTimeout = Duration.ofSeconds(10);
     private Duration writeTimeout = Duration.ofSeconds(60);
     private Duration readTimeout = Duration.ofSeconds(10);
+
+    private boolean checkBucket = true;
+    private boolean createBucket = true;
+
+    public boolean isSecure() {
+        return secure;
+    }
+
+    public void setSecure(boolean secure) {
+        this.secure = secure;
+    }
+
+    public boolean isCheckBucket() {
+        return checkBucket;
+    }
+
+    public void setCheckBucket(boolean checkBucket) {
+        this.checkBucket = checkBucket;
+    }
+
+    public boolean isCreateBucket() {
+        return createBucket;
+    }
+
+    public void setCreateBucket(boolean createBucket) {
+        this.createBucket = createBucket;
+    }
 
     public String getBuckek_name() {
         return buckek_name;

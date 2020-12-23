@@ -1,17 +1,22 @@
 package com.example.springbootminio;
 
+import com.google.api.client.util.IOUtils;
 import io.minio.ObjectStat;
 import io.minio.messages.Bucket;
 import io.minio.messages.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLConnection;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
@@ -49,15 +54,22 @@ public class MinioStorageController {
 
     }
 
-    @GetMapping(path = "/list")
-    public List<Item> listObject(){
-
-        return  minioAdapter.list();
+    @GetMapping("/")
+    public List<Item> testMinio()  {
+        return minioAdapter.list();
     }
+
 
     @GetMapping("/remove/{file}")
     public void RemoveFile(@PathVariable String file) throws IOException {
         minioAdapter.removeFile(file);
+    }
+
+    @GetMapping("/health")
+    public Health health()
+    {
+        MinioHealthIndicator minioHealthIndicator = new MinioHealthIndicator();
+        return minioHealthIndicator.health();
     }
 
 }
